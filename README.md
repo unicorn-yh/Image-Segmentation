@@ -66,7 +66,7 @@ The experiment mainly refers to the deep fully convolutional neural network arch
 All pairs of encoders and decoders in SegNet are used to classify different resolutions and generate feature maps during the classification process. The semantic segmentation architecture consists of multiple combinations of an encoder network followed by a decoder network. The encoder is usually a pretrained classification network such as VGG or ResNet (VGG is used in our experiments), followed by a decoder network.
 
 <p align="center">
- <img src="(README/0AM6HnBSBXv4cFk3N.png" alt="Nut-shell architecture"/>
+ <img src="README/0AM6HnBSBXv4cFk3N.png" alt="Nut-shell architecture"/>
 </p>
 
 <h4 align="center">
@@ -82,7 +82,7 @@ These methods achieve better classification accuracy, but reduce the size of fea
 To store this space efficiently, SegNet only stores the pooling index of the max-pooling layer, i.e., for each encoder map will store the position of the largest feature value in each pooling window, each of which occupies only 2 bits. The advantage of the encoder is to optimize the boundary division in the image and reduce the network parameters.
 
 <p align="center">
- <img src="README/README/022ydRfyjbwthN9ar.png" alt="Encoder architecture"/>
+ <img src="README/022ydRfyjbwthN9ar.png" alt="Encoder architecture"/>
 </p>
 
 <h4 align="center">
