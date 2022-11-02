@@ -29,29 +29,33 @@ In addition to the medical field, image segmentation is also widely used in othe
 
 Image semantic segmentation studies uncountable objects in an image, analyzing each image pixel and assigning a unique class label based on the feature represented by the pixel. As shown in Figure 1, the image contains two cars, multiple pedestrians, a road, and the sky. Each has the same characteristics between two vehicles and between multiple pedestrians. However, the output of image semantic segmentation cannot separately count the number of cars or pedestrians. Commonly used semantic segmentation techniques are SegNet, U-Net, DeconvNet and FCNs. This paper mainly discusses image semantic segmentation based on SegNet [3].
 
+<p align="center">
+ <img src="README/image-20221019170750470.png" alt="Image Semantic Segmentation"/>
+</p>
 
-
-![image-20221019170750470](README/image-20221019170750470.png)
-
-​															Figure 1: Image Semantic Segmentation [2]
-
+<h4 align="center">
+​	Figure 1: Image Semantic Segmentation [2]
+</h4>
+ 
 <br />
 
 ## Solution
 
-The goal of the experiment is to take an RGB color image ($$height \times width \times 3$$) or a grayscale image ($$height \times width \times 1$$ ) and output the resulting segmentation matrix, where each pixel in the matrix is an integer ($$height \times width \times 1$$ ) representing a class label. Similar to how machine learning handles standard categorical values, the program will generate experimental results by one-hot encoding of class labels, with the core of creating an output channel for each class. Model performance is evaluated by taking the argmax of each pixel vector, and using the predicted values to generate a segmentation matrix, superimposing the predicted labels on the observations. When a single channel of the predicted label is covered, it is called a mask and is used to highlight regions in the image where a specific class exists.
+The goal of the experiment is to take an RGB color image $(height \times width \times 3)$ or a grayscale image $(height \times width \times 1)$ and output the resulting segmentation matrix, where each pixel in the matrix is an integer $(height \times width \times 1)$ representing a class label. Similar to how machine learning handles standard categorical values, the program will generate experimental results by one-hot encoding of class labels, with the core of creating an output channel for each class. Model performance is evaluated by taking the argmax of each pixel vector, and using the predicted values to generate a segmentation matrix, superimposing the predicted labels on the observations. When a single channel of the predicted label is covered, it is called a mask and is used to highlight regions in the image where a specific class exists.
 
 A simple way to build a neural network architecture for image segmentation is to stack multiple convolutional layers with the same padding and output the final segmented image, where the purpose of setting multiple identical padding is to maintain size. The model directly learns the mapping from the input image to its corresponding segmentation through the continuous transformation of the feature map. However, the convolutional neural network based on image segmentation requires a huge amount of computation and time to achieve a fairly high accuracy.
 
 The experiment mainly refers to the deep fully convolutional neural network architecture SegNet [3] proposed by Badrinarayanan et al. for image semantic segmentation, which is an image segmentation architecture using encoder and decoder type architectures. All 13 convolutional layers in this model use a pretrained VGG16 model as their encoder part, and for each encoder layer there is a corresponding decoder network that upsamples the image to its original size. During decoding, in order to upsample layers, SegNet is recalled on the corresponding encoder layer using the "pooling index of the max-pooling layer", making the training process easier as the network does not need to learn the upsampling weights again.
 
+<p align="center">
+ <img src="README/image-20221019171137878.png" alt="Encoder and decoder structure of SegNet"/>
+</p>
 
+<h4 align="center">
+​	Figure 2: Encoder and decoder structure of SegNet [3]
+</h4>
 
-![image-20221019171137878](README/image-20221019171137878.png)
-
-​												Figure 2: Encoder and decoder structure of SegNet [3]
-
-
+<br />
 
  SegNet has only convolutional layers and does not contain fully connected layers. Since all fully connected layers are removed, the number of trainable parameters is reduced a lot. In SegNet, only the pooling index is transferred from the compression path to the expansion path, thus using less memory than other convolutional neural networks (such as U-Net) for image semantic segmentation. The role of the decoder network is to map the low-resolution encoder network feature map to the full input resolution feature map for classification from the pixel dimension.
 
@@ -61,13 +65,15 @@ The experiment mainly refers to the deep fully convolutional neural network arch
 
 All pairs of encoders and decoders in SegNet are used to classify different resolutions and generate feature maps during the classification process. The semantic segmentation architecture consists of multiple combinations of an encoder network followed by a decoder network. The encoder is usually a pretrained classification network such as VGG or ResNet (VGG is used in our experiments), followed by a decoder network.
 
+<p align="center">
+ <img src="README/0AM6HnBSBXv4cFk3N.png" alt="Nut-shell architecture"/>
+</p>
 
+<h4 align="center">
+​	Figure 3: Nut-shell architecture
+</h4>
 
-![img](README/0AM6HnBSBXv4cFk3N.png)
-
-​																	Figure 3: Nut-shell architecture
-
-
+<br />
 
 The encoder constructs 13 convolutional layers from the VGG16 model. Since SegNet removes the fully connected network, the number of network parameters is reduced from 134 million to 14.7 million. All encoders are shown in Figure 4. SegNet differs from other convolutional neural networks in the downsampling stage, while max pooling is used to achieve translation invariance on small spatial displacements in the image, combining this with downsampling objects will result in more per pixel The input image context information (i.e. the spatial window). 
 
@@ -75,11 +81,15 @@ These methods achieve better classification accuracy, but reduce the size of fea
 
 To store this space efficiently, SegNet only stores the pooling index of the max-pooling layer, i.e., for each encoder map will store the position of the largest feature value in each pooling window, each of which occupies only 2 bits. The advantage of the encoder is to optimize the boundary division in the image and reduce the network parameters.
 
+<p align="center">
+ <img src="README/022ydRfyjbwthN9ar.png" alt="Encoder architecture"/>
+</p>
 
+<h4 align="center">
+​	Figure 4: Encoder architecture
+</h4>
 
-![img](README/022ydRfyjbwthN9ar.png)
-
-​																	Figure 4: Encoder architecture
+<br />
 
 
 
@@ -95,7 +105,9 @@ The high-dimensional feature representation generated by the last decoder in the
 
 ## Algorithm Flowchart
 
-![image-20221019172220077](README/image-20221019172220077.png)
+<p align="center">
+ <img src="README/image-20221019172220077.png" alt=""/>
+</p>
 
 
 
@@ -171,9 +183,9 @@ After using the CPU to train the model, I tried to use colab to train the model 
 
 Through this project, I have learned how to use the SegNet structure to train an image semantic segmentation model, and improve the performance and efficiency of model training by adjusting parameters and improving computer hardware requirements. SegNet can train models with high accuracy in computer vision image segmentation, at the cost of time spent and better hardware performance. Image segmentation is widely used in many fields, such as autonomous driving, medical imaging and industrial inspection, and has made many contributions. It can be seen that image segmentation needs to be a sub-field of artificial intelligence that researchers need to pay attention to and study in depth.
 
+<br />
 
-
-#### *References：*
+### *References：*
 
 [1]   Kirillov, Alexander and He, Kaiming and Girshick, Ross and Rother, Carsten and Dollár, Piotr. Panoptic Segmentation[J]. *https://arxiv.org/abs/1801.00868* , 2018.
 
