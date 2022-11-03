@@ -193,4 +193,3 @@ Through this project, I have learned how to use the SegNet structure to train an
 
 [3]   Badrinarayanan, Vijay and Kendall, Alex and Cipolla, Roberto. SegNet: A Deep Convolutional Encoder-Decoder Architecture for Image Segmentation[J]. *https://arxiv.org/abs/1511.00561* , 2015.
 
-[4]   李元香, 项正龙, 张伟艳. 模拟退火算法的弛豫模型与时间复杂性分析[J]. *计算机学报*, 2020, 43(5): 802-803.
